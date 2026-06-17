@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QR Kártya – Respirer Pilates</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet" />
+
+  <!-- QR Code library -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+
+  <style>
+    /* ─── Screen UI ────────────────────────────────────── */
+    @media screen {
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      body {
+        font-family: 'DM Sans', sans-serif;
+        background: #F0ECE6;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 3rem 1.5rem;
+        gap: 2rem;
+      }
+
+      .screen-header {
+        text-align: center;
+        max-width: 520px;
+      }
+
+      .screen-header h1 {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.6rem;
+        font-weight: 400;
+        font-style: italic;
+        color: #1C1916;
+        margin-bottom: 0.5rem;
+      }
+
+      .screen-header p {
+        font-size: 0.875rem;
+        color: #7A6E68;
+        line-height: 1.6;
+        margin-bottom: 0.75rem;
+      }
+
+      .url-input-row {
+        display: flex;
+        gap: 0.5rem;
+        max-width: 460px;
+        margin: 0 auto;
+      }
+
+      .url-input {
+        flex: 1;
+        padding: 0.65rem 1rem;
+        border: 1px solid rgba(28,25,22,0.14);
+        border-radius: 9999px;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.875rem;
+        background: #fff;
+        color: #1C1916;
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
+      }
+
+      .url-input:focus {
+        border-color: rgba(176,142,122,0.6);
+        box-shadow: 0 0 0 3px rgba(176,142,122,0.1);
+      }
+
+      .url-btn {
+        padding: 0.65rem 1.25rem;
+        border-radius: 9999px;
+        border: none;
+        background: #1C1916;
+        color: #fff;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+
+      .url-btn:hover { background: #2D2420; }
+
+      .print-btn {
+        padding: 0.75rem 2rem;
+        border-radius: 9999px;
+        border: 1px solid rgba(28,25,22,0.15);
+        background: #fff;
+        color: #1C1916;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.9rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.2s, box-shadow 0.2s;
+        display: flex; align-items: center; gap: 0.5rem;
+      }
+
+      .print-btn:hover { background: #1C1916; color: #fff; }
+
+      .card-preview {
+        box-shadow: 0 8px 40px rgba(0,0,0,0.15), 0 2px 8px rgba(0,0,0,0.08);
+        border-radius: 2px;
+      }
+
+      .hint {
+        font-size: 0.78rem;
+        color: #9A8E87;
+        text-align: center;
+        max-width: 400px;
+        line-height: 1.6;
+      }
+    }
+
+    /* ─── Print / Card styles ─────────────────────────── */
+    /*
+      A5 = 148mm × 210mm
+      Designed as a portrait card — can be framed or placed in a stand.
+    */
+
+    @page {
+      size: A5 portrait;
+      margin: 0;
+    }
+
+    @media print {
+      body { background: #fff; padding: 0; }
+      .screen-header, .url-input-row, .print-btn, .card-preview-label, .hint { display: none !important; }
+      .card-preview { box-shadow: none; }
+    }
+
+    /* ─── The actual card ─────────────────────────────── */
+    #print-card {
+      width: 148mm;
+      height: 210mm;
+      background: #FDFCFA;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12mm 11mm 10mm;
+      overflow: hidden;
+      font-family: 'DM Sans', sans-serif;
+      color: #1C1916;
+    }
+
+    /* Corner botanical accents */
+    .botanical-tl, .botanical-br {
+      position: absolute;
+      opacity: 0.12;
+      pointer-events: none;
+    }
+
+    .botanical-tl { top: 0; left: 0; }
+    .botanical-br { bottom: 0; right: 0; transform: rotate(180deg); }
+
+    /* Top section */
+    .card-top {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3.5mm;
+      text-align: center;
+    }
+
+    .card-logo-ring {
+      width: 13mm; height: 13mm;
+      border-radius: 50%;
+      border: 0.4mm solid #D4C0B3;
+      background: linear-gradient(135deg, #F7F3EF, #fff);
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .card-studio-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 6.5pt;
+      font-weight: 400;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #9A8E87;
+    }
+
+    .card-divider-h {
+      width: 24mm; height: 0.3mm;
+      background: linear-gradient(to right, transparent, #D4C0B3, transparent);
+    }
+
+    /* Headline */
+    .card-headline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 19pt;
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.2;
+      text-align: center;
+      color: #1C1916;
+      letter-spacing: -0.01em;
+    }
+
+    .card-subline {
+      font-size: 7.5pt;
+      color: #7A6E68;
+      text-align: center;
+      line-height: 1.6;
+      letter-spacing: 0.01em;
+      max-width: 90mm;
+    }
+
+    /* QR code section */
+    .card-qr-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4mm;
+    }
+
+    .qr-frame {
+      width: 58mm; height: 58mm;
+      padding: 3.5mm;
+      background: #fff;
+      border: 0.5mm solid #E8DDD6;
+      border-radius: 3mm;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 1mm 4mm rgba(0,0,0,0.06);
+    }
+
+    #qr-canvas {
+      width: 51mm; height: 51mm;
+      display: block;
+    }
+
+    .card-url {
+      font-family: 'DM Sans', monospace;
+      font-size: 6pt;
+      color: #9A8E87;
+      letter-spacing: 0.03em;
+    }
+
+    /* CTA text */
+    .card-cta {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2mm;
+      text-align: center;
+    }
+
+    .card-cta-main {
+      font-size: 9pt;
+      font-weight: 500;
+      color: #1C1916;
+      letter-spacing: 0.01em;
+    }
+
+    .card-cta-sub {
+      font-size: 7pt;
+      color: #9A8E87;
+      letter-spacing: 0.02em;
+    }
+
+    /* Bottom */
+    .card-bottom {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2mm;
+      text-align: center;
+    }
+
+    .card-tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 8pt;
+      font-style: italic;
+      color: #B08E7A;
+      letter-spacing: 0.04em;
+    }
+
+    .card-website {
+      font-size: 6.5pt;
+      color: #B8ADA8;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* Thin border around entire card */
+    #print-card::after {
+      content: '';
+      position: absolute;
+      inset: 3mm;
+      border: 0.3mm solid rgba(176,142,122,0.2);
+      border-radius: 2mm;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Screen UI ────────────────────────────────── -->
+  <div class="screen-header">
+    <h1>QR Kártya Generátor</h1>
+    <p>Add meg a véleményező oldal URL-jét, majd nyomtasd ki az A5-ös kártyát.</p>
+    <div class="url-input-row">
+      <input
+        class="url-input"
+        id="url-input"
+        type="url"
+        placeholder="https://velemeny.respirerpilates.hu"
+        value="https://velemeny.respirerpilates.hu"
+      />
+      <button class="url-btn" onclick="generateQR()">Frissít</button>
+    </div>
+  </div>
+
+  <!-- ── Print card ──────────────────────────────── -->
+  <div class="card-preview">
+    <div id="print-card">
+
+      <!-- Corner botanical SVGs -->
+      <svg class="botanical-tl" width="80" height="80" viewBox="0 0 80 80" fill="none">
+        <path d="M0 0 Q40 0 40 40 Q40 20 20 20 Q0 20 0 0Z" fill="#B08E7A"/>
+        <path d="M5 5 Q30 5 30 30" stroke="#B08E7A" stroke-width="0.8" fill="none"/>
+        <circle cx="18" cy="8" r="3" fill="#B08E7A"/>
+        <circle cx="8" cy="18" r="2.5" fill="#B08E7A"/>
+        <circle cx="25" cy="14" r="2" fill="#B08E7A"/>
+      </svg>
+
+      <svg class="botanical-br" width="80" height="80" viewBox="0 0 80 80" fill="none">
+        <path d="M0 0 Q40 0 40 40 Q40 20 20 20 Q0 20 0 0Z" fill="#B08E7A"/>
+        <path d="M5 5 Q30 5 30 30" stroke="#B08E7A" stroke-width="0.8" fill="none"/>
+        <circle cx="18" cy="8" r="3" fill="#B08E7A"/>
+        <circle cx="8" cy="18" r="2.5" fill="#B08E7A"/>
+        <circle cx="25" cy="14" r="2" fill="#B08E7A"/>
+      </svg>
+
+      <!-- Top: studio identity -->
+      <div class="card-top">
+        <div class="card-logo-ring">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B08E7A" stroke-width="1.5" stroke-linecap="round">
+            <path d="M12 3C8 3 4 7 4 12s4 9 8 9 8-4 8-9" />
+            <path d="M12 3c2 3 3 6 1 9s-6 5-9 6" />
+            <path d="M20 4c1 4 0 9-4 12" />
+          </svg>
+        </div>
+        <div class="card-studio-name">Respirer · Reformer Pilates</div>
+        <div class="card-divider-h"></div>
+
+        <div class="card-headline">Oszd meg<br/>a véleményed</div>
+
+        <div class="card-subline">
+          Mit ad neked a reformer pilates?<br />
+          Pár szó is elég — anonim és gyors!
+        </div>
+      </div>
+
+      <!-- Middle: QR code -->
+      <div class="card-qr-section">
+        <div class="card-cta">
+          <div class="card-cta-main">Szkenneld be a kódot 📱</div>
+          <div class="card-cta-sub">és írd meg nekünk</div>
+        </div>
+        <div class="qr-frame">
+          <canvas id="qr-canvas"></canvas>
+        </div>
+        <div class="card-url" id="card-url-text">velemeny.respirerpilates.hu</div>
+      </div>
+
+      <!-- Bottom: tagline & website -->
+      <div class="card-bottom">
+        <div class="card-tagline">Lélegezz mélyen · Mozogj tudatosan</div>
+        <div class="card-website">respirerpilates.hu</div>
+      </div>
+
+    </div>
+  </div>
+
+  <button class="print-btn" onclick="window.print()">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+      <path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/>
+      <rect x="6" y="14" width="12" height="8" rx="1"/>
+    </svg>
+    Nyomtatás (A5)
+  </button>
+
+  <p class="hint">
+    Nyomtatás előtt a böngészőben állítsd be: <strong>A5 méret, álló tájolás, margók: 0</strong>.
+    Chrome/Edge ajánlott. A URL bevitele után kattints a Frissít gombra.
+  </p>
+
+  <script>
+    // Default URL — update this after Cloudflare Pages deployment
+    const DEFAULT_URL = 'https://velemeny.respirerpilates.hu';
+
+    function generateQR() {
+      const url = document.getElementById('url-input').value.trim() || DEFAULT_URL;
+
+      // Update display URL text (strip protocol for cleaner look)
+      document.getElementById('card-url-text').textContent = url.replace(/^https?:\/\//, '');
+
+      const canvas = document.getElementById('qr-canvas');
+      // 51mm at 96dpi ≈ 193px, but we render at 2× for sharpness
+      QRCode.toCanvas(canvas, url, {
+        width: 386,
+        margin: 1,
+        color: {
+          dark:  '#1C1916',
+          light: '#FFFFFF',
+        },
+        errorCorrectionLevel: 'M',
+      }, function (err) {
+        if (err) console.error('QR error:', err);
+      });
+    }
+
+    // Generate on load
+    document.addEventListener('DOMContentLoaded', generateQR);
+
+    // Regenerate on Enter key in URL input
+    document.getElementById('url-input').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') generateQR();
+    });
+  </script>
+
+</body>
+</html>
