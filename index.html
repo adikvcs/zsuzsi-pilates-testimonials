@@ -82,27 +82,15 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.65rem;
       margin-bottom: 2.25rem;
       animation: up 0.7s 0.08s cubic-bezier(0.16,1,0.3,1) both;
     }
 
-    .logo-ring {
-      width: 54px; height: 54px;
-      border-radius: 9999px;
-      border: 1px solid var(--accent-light);
-      background: linear-gradient(135deg, var(--accent-soft) 0%, #fff 100%);
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 2px 12px rgba(176,142,122,0.15);
-    }
-
-    .studio-name {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 0.82rem;
-      font-weight: 400;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--ink-muted);
+    .studio-logo {
+      height: 44px;
+      width: auto;
+      display: block;
+      opacity: 0.88;
     }
 
     /* ── Divider ──────────────────────────────────────── */
@@ -363,14 +351,7 @@
 
     <!-- Studio identity -->
     <header class="studio-header">
-      <div class="logo-ring">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B08E7A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 3C8 3 4 7 4 12s4 9 8 9 8-4 8-9" />
-          <path d="M12 3c2 3 3 6 1 9s-6 5-9 6" />
-          <path d="M20 4c1 4 0 9-4 12" />
-        </svg>
-      </div>
-      <span class="studio-name">Respirer · Reformer Pilates</span>
+      <img class="studio-logo" src="logo.png" alt="Respirer Reformer Pilates" />
     </header>
 
     <div class="divider"></div>
