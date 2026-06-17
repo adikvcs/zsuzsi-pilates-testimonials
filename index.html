@@ -90,7 +90,7 @@
       height: 44px;
       width: auto;
       display: block;
-      opacity: 0.88;
+      opacity: 1;
     }
 
     /* ── Divider ──────────────────────────────────────── */
@@ -141,16 +141,6 @@
 
     /* ── Form ─────────────────────────────────────────── */
     .form-block { animation: up 0.7s 0.26s cubic-bezier(0.16,1,0.3,1) both; }
-
-    .field-label {
-      display: block;
-      font-size: 0.72rem;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--ink-muted);
-      margin-bottom: 0.55rem;
-    }
 
     textarea {
       width: 100%;
@@ -213,16 +203,8 @@
       flex-shrink: 0;
       display: flex;
       align-items: center;
-      gap: 0.3rem;
+      gap: 0.32rem;
       white-space: nowrap;
-    }
-
-    .anon-dot {
-      width: 5px; height: 5px;
-      border-radius: 9999px;
-      background: #7CB87C;
-      display: inline-block;
-      flex-shrink: 0;
     }
 
     /* Submit button */
@@ -230,8 +212,8 @@
       width: 100%;
       padding: 1.05rem 2rem;
       border-radius: 9999px;
-      background: var(--ink);
-      color: #fff;
+      background: var(--accent);
+      color: var(--ink);
       font-family: 'DM Sans', sans-serif;
       font-size: 0.95rem;
       font-weight: 500;
@@ -251,7 +233,7 @@
     .btn::after {
       content: '';
       position: absolute; inset: 0;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.11) 50%, transparent);
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18) 50%, transparent);
       width: 38%; transform: translateX(-130%) skewX(-15deg);
       animation: shimmer 3.5s ease-in-out infinite;
       animation-delay: 2.5s;
@@ -264,7 +246,7 @@
     }
 
     @media (hover: hover) and (pointer: fine) {
-      .btn:hover { background: #2D2420; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,0,0,0.18); }
+      .btn:hover { background: #9A7B67; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(176,142,122,0.32); }
     }
     .btn:active { transform: scale(0.98) !important; transition-duration: 0.08s !important; }
     .btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none !important; }
@@ -379,7 +361,6 @@
         <input type="hidden" name="from_name"    value="Respirer Visszajelző" />
         <input type="checkbox" name="botcheck"   style="display:none" tabindex="-1" />
 
-        <label class="field-label" for="msg">A véleményed</label>
         <textarea
           id="msg" name="message"
           placeholder="Pl. Megváltozott a testtartásom, sokkal erősebb és tudatosabb vagyok…"
@@ -393,7 +374,10 @@
             maxlength="60" autocomplete="given-name"
           />
           <span class="anon-badge">
-            <span class="anon-dot"></span>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="11" width="18" height="11" rx="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
             anonim
           </span>
         </div>
