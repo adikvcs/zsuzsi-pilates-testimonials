@@ -151,16 +151,6 @@
       color: #1C1916;
     }
 
-    /* Corner botanical accents */
-    .botanical-tl, .botanical-br {
-      position: absolute;
-      opacity: 0.12;
-      pointer-events: none;
-    }
-
-    .botanical-tl { top: 0; left: 0; }
-    .botanical-br { bottom: 0; right: 0; transform: rotate(180deg); }
-
     /* Top section */
     .card-top {
       display: flex;
@@ -185,22 +175,13 @@
     /* Headline */
     .card-headline {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 19pt;
+      font-size: 24pt;
       font-weight: 300;
       font-style: italic;
-      line-height: 1.2;
+      line-height: 1.15;
       text-align: center;
       color: #1C1916;
       letter-spacing: -0.01em;
-    }
-
-    .card-subline {
-      font-size: 7.5pt;
-      color: #7A6E68;
-      text-align: center;
-      line-height: 1.6;
-      letter-spacing: 0.01em;
-      max-width: 90mm;
     }
 
     /* QR code section */
@@ -208,11 +189,11 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4mm;
+      gap: 5mm;
     }
 
     .qr-frame {
-      width: 58mm; height: 58mm;
+      width: 70mm; height: 70mm;
       padding: 3.5mm;
       background: #fff;
       border: 0.5mm solid #E8DDD6;
@@ -220,37 +201,23 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 1mm 4mm rgba(0,0,0,0.06);
+      box-shadow: 0 1mm 5mm rgba(0,0,0,0.07);
     }
 
     #qr-img {
-      width: 51mm; height: 51mm;
+      width: 63mm; height: 63mm;
       display: block;
       image-rendering: crisp-edges;
     }
 
     .card-url { display: none; }
 
-    /* CTA text */
-    .card-cta {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 2mm;
-      text-align: center;
-    }
-
-    .card-cta-main {
-      font-size: 9pt;
+    .card-scan-prompt {
+      font-size: 8pt;
       font-weight: 500;
       color: #1C1916;
-      letter-spacing: 0.01em;
-    }
-
-    .card-cta-sub {
-      font-size: 7pt;
-      color: #9A8E87;
-      letter-spacing: 0.02em;
+      letter-spacing: 0.04em;
+      text-align: center;
     }
 
     /* Bottom */
@@ -264,10 +231,12 @@
 
     .card-tagline {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 8pt;
+      font-size: 8.5pt;
       font-style: italic;
       color: #B08E7A;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.03em;
+      text-align: center;
+      line-height: 1.5;
     }
 
     .card-website {
@@ -310,52 +279,24 @@
   <div class="card-preview">
     <div id="print-card">
 
-      <!-- Corner botanical SVGs -->
-      <svg class="botanical-tl" width="80" height="80" viewBox="0 0 80 80" fill="none">
-        <path d="M0 0 Q40 0 40 40 Q40 20 20 20 Q0 20 0 0Z" fill="#B08E7A"/>
-        <path d="M5 5 Q30 5 30 30" stroke="#B08E7A" stroke-width="0.8" fill="none"/>
-        <circle cx="18" cy="8" r="3" fill="#B08E7A"/>
-        <circle cx="8" cy="18" r="2.5" fill="#B08E7A"/>
-        <circle cx="25" cy="14" r="2" fill="#B08E7A"/>
-      </svg>
-
-      <svg class="botanical-br" width="80" height="80" viewBox="0 0 80 80" fill="none">
-        <path d="M0 0 Q40 0 40 40 Q40 20 20 20 Q0 20 0 0Z" fill="#B08E7A"/>
-        <path d="M5 5 Q30 5 30 30" stroke="#B08E7A" stroke-width="0.8" fill="none"/>
-        <circle cx="18" cy="8" r="3" fill="#B08E7A"/>
-        <circle cx="8" cy="18" r="2.5" fill="#B08E7A"/>
-        <circle cx="25" cy="14" r="2" fill="#B08E7A"/>
-      </svg>
-
       <!-- Top: studio identity -->
       <div class="card-top">
         <img class="card-studio-logo" src="logo.png" alt="Respirer Reformer Pilates" />
         <div class="card-divider-h"></div>
-
         <div class="card-headline">Oszd meg<br/>a véleményed</div>
-
-        <div class="card-subline">
-          Mit ad neked a reformer pilates?<br />
-          Pár szó is elég — anonim és gyors!
-        </div>
       </div>
 
       <!-- Middle: QR code -->
       <div class="card-qr-section">
-        <div class="card-cta">
-          <div class="card-cta-main">Szkenneld be a kódot 📱</div>
-          <div class="card-cta-sub">és írd meg nekünk</div>
-        </div>
         <div class="qr-frame">
           <img id="qr-img" alt="QR kód" />
         </div>
-        <div class="card-url" id="card-url-text">velemeny.respirerpilates.hu</div>
+        <div class="card-scan-prompt">Szkenneld be a kódot</div>
       </div>
 
       <!-- Bottom: tagline -->
       <div class="card-bottom">
-        <div class="card-tagline">Lélegezz mélyet, mozogj tudatosan,</div>
-        <div class="card-tagline" style="margin-top: -1.5mm;">és érezd a változást</div>
+        <div class="card-tagline">Lélegezz mélyet, mozogj tudatosan,<br/>és érezd a változást</div>
       </div>
 
     </div>
