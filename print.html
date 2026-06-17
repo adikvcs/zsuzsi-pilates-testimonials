@@ -151,6 +151,16 @@
       color: #1C1916;
     }
 
+    /* Corner botanical accents */
+    .botanical-tl, .botanical-br {
+      position: absolute;
+      opacity: 0.22;
+      pointer-events: none;
+    }
+
+    .botanical-tl { top: 0; left: 0; }
+    .botanical-br { bottom: 0; right: 0; transform: rotate(180deg); }
+
     /* Top section */
     .card-top {
       display: flex;
@@ -278,6 +288,22 @@
   <!-- ── Print card ──────────────────────────────── -->
   <div class="card-preview">
     <div id="print-card">
+
+      <!-- Corner botanical SVGs -->
+      <svg class="botanical-tl" width="80" height="80" viewBox="0 0 80 80" fill="none">
+        <path d="M0 0 Q40 0 40 40 Q40 20 20 20 Q0 20 0 0Z" fill="#B08E7A"/>
+        <path d="M5 5 Q30 5 30 30" stroke="#B08E7A" stroke-width="0.8" fill="none"/>
+        <circle cx="18" cy="8" r="3" fill="#B08E7A"/>
+        <circle cx="8" cy="18" r="2.5" fill="#B08E7A"/>
+        <circle cx="25" cy="14" r="2" fill="#B08E7A"/>
+      </svg>
+      <svg class="botanical-br" width="80" height="80" viewBox="0 0 80 80" fill="none">
+        <path d="M0 0 Q40 0 40 40 Q40 20 20 20 Q0 20 0 0Z" fill="#B08E7A"/>
+        <path d="M5 5 Q30 5 30 30" stroke="#B08E7A" stroke-width="0.8" fill="none"/>
+        <circle cx="18" cy="8" r="3" fill="#B08E7A"/>
+        <circle cx="8" cy="18" r="2.5" fill="#B08E7A"/>
+        <circle cx="25" cy="14" r="2" fill="#B08E7A"/>
+      </svg>
 
       <!-- Top: studio identity -->
       <div class="card-top">
